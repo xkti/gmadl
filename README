@@ -1,0 +1,27 @@
+gmadl - garry's mod addon downloader script
+written in bash, released under public domain/cc0
+
+runs best on linux, wsl works too.
+requires depotdownloader[1], bash, jq, curl, wget
+
+what it does:
+ - allows batch downloading of addons and collections[0]
+     ./download-addon.sh 2193997180 232539187 3039181160
+     ./download-collection.sh 355803678
+ - metadata scraping and saving
+     saves images*, json, and human-readable info
+     saves youtube ids as well, but doesn't download them
+ - logs successful downloads to a text file
+    so it won't redownload up to date addons
+
+made in response to the nintendo addon massacre, i hope this tool
+will be of use to others in order to preserve content from here on out.
+although designed specifically for gmod, this script can easily be
+modified to work with other games (assuming they are supported.)
+
+[0] - collection downloader only downloads the addons and their respective
+      metadata, it does not save anything about the collection itself.
+[1] - depotdownloader *must* be in the same directory as these scripts.
+[2] - steam servers may return a file with no filename, which wget will
+      save as index.html. the logic to handle this issue is complicated,
+      so this will be dealt with at a later time. apologies.
