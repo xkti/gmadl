@@ -100,6 +100,7 @@ for id; do
         mv "${file}" "addons/${id}_${MANIFEST_ID}/${ITERATE}.${file##*.}"
       done
     done
+    ITERATE=0
     rmdir "${TEMPDIR}"
   fi
 
