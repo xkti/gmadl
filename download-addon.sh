@@ -25,8 +25,11 @@ if [[ ${FAIL} -eq 1 ]]; then
   exit 1
 fi
 
+# Dedupe list of addons in case of duplicates
+todownload=($(tr ' ' '\n' <<<"$@" | sort -u))
+
 # Main script
-for id; do
+for id in "${todownload[@]}"; do
   echo "=============================================="
   echo "Checking if ${id} is valid..."
   # Save API response to variable and start parsing
@@ -125,6 +128,6 @@ done
 # Summary report
 echo "DONE! ${#GOOD[@]} succeeded, ${#UPTODATE[@]} up to date, ${#FAIL[@]} failed, ${#SKIP[@]} skipped (collection)"
 if [[ -n ${FAIL} ]]; then
-  echo "Failed: $(IFS=","; echo "${FAIL[*]}" | sed 's/,/, /g')"; fi
+  echo "Failed: ${FAIL[@]}"; fi
 if [[ -n ${SKIP} ]]; then
-  echo "Skipped: $(IFS=","; echo "${SKIP[*]}" | sed 's/,/, /g')"; fi
+  echo "Skipped: ${SKIP[@]}"; fi

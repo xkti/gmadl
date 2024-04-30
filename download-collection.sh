@@ -25,10 +25,13 @@ if [[ ${FAIL} -eq 1 ]]; then
   exit 1
 fi
 
+# Deduplicate ids to download
+todownload=($(tr ' ' '\n' <<<"$@" | sort -u))
+
 # Main script
-for id; do
-  echo "=============================================="
-  echo "Collection wrapper script -- mostly working"
+echo "=============================================="
+echo "Collection wrapper script -- mostly working"
+for id in "${todownload[@]}"; do
   echo "Checking if ${id} is valid..."
   # Save API response to variable and start parsing
   RESPONSE="$(curl -sd "itemcount=1&publishedfileids[0]=${id}" https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1 | jq -r '.response.publishedfiledetails[]')"
@@ -48,7 +51,10 @@ for id; do
     continue
   fi
 
-  COLLECTION=($(curl -sd "collectioncount=1&publishedfileids[0]=${id}" https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/ | jq -r '.response.collectiondetails[] | .children[] | select(.filetype == 0) | .publishedfileid' | tr '\n' ' '))
-  echo "Calling download-addon.sh to download ${#COLLECTION[@]} addons..."
-  ./download-addon.sh ${COLLECTION[@]}
+  # Collect all addons into array and then dedupe.
+  COLLECTION+=($(curl -sd "collectioncount=1&publishedfileids[0]=${id}" https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/ | jq -r '.response.collectiondetails[] | .children[] | select(.filetype == 0) | .publishedfileid'))
+  COLLECTION=($(tr ' ' '\n' <<< "${COLLECTION[@]}" | sort -u))
 done
+
+echo "Calling download-addon.sh to download ${#COLLECTION[@]} addons..."
+./download-addon.sh ${COLLECTION[@]}
