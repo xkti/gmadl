@@ -122,7 +122,7 @@ for id in "${todownload[@]}"; do
   echo "Looks good! Moving on."
   GOOD+=("${id}")
   # Add successful download to list
-  echo "${id}_${MANIFEST_ID}" >> downloaded.txt
+  echo "${id}_${MANIFEST_ID} ${TITLE}" >> downloaded.txt
 done
 
 # Summary report
