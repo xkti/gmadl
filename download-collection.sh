@@ -30,7 +30,7 @@ todownload=($(tr ' ' '\n' <<<"$@" | sort -u))
 
 # Main script
 echo "=============================================="
-echo "Collection wrapper script -- mostly working"
+echo "Collection wrapper script"
 for id in "${todownload[@]}"; do
   echo "Checking if ${id} is valid..."
   # Save API response to variable and start parsing
@@ -38,7 +38,6 @@ for id in "${todownload[@]}"; do
   # If fails or doesn't exist, .result will return anything but 1.
   RESULT="$(jq .result <<< "${RESPONSE}")"
   if [[ ${RESULT} -ne 1 ]]; then
-    FAIL+=("${id}")
     echo "ERROR: ${id} returned code ${RESULT}! It probably doesn't exist." >&2
     continue
   fi
@@ -47,7 +46,6 @@ for id in "${todownload[@]}"; do
   CREATOR_APP_ID="$(jq -r .creator_app_id <<< "${RESPONSE}")"
   if [[ $CREATOR_APP_ID -ne 766 ]]; then
     echo "ERROR: ${id} is not a collection!" >&2
-    FAIL+=("${id}")
     continue
   fi
 
