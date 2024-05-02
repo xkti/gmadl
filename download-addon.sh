@@ -12,10 +12,13 @@ for id; do
   fi
 done
 
-if ! hash jq; then echo "jq not found!" >&2; FAIL=1; fi
-if ! hash curl; then echo "curl not found!" >&2; FAIL=1; fi
-if ! hash wget; then echo "wget not found!" >&2; FAIL=1; fi
-if ! hash ./DepotDownloader; then
+if ! command -v jq &>/dev/null; then
+  echo "jq not found!" >&2; FAIL=1; fi
+if ! command -v curl &>/dev/null; then
+  echo "curl not found!" >&2; FAIL=1; fi
+if ! command -v wget &>/dev/null; then
+  echo "wget not found!" >&2; FAIL=1; fi
+if ! command -v ./DepotDownloader &>/dev/null; then
   echo "DepotDownloader not found! Make sure it's in the same directory as this script." >&2
   FAIL=1
 fi
