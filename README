@@ -1,27 +1,32 @@
-gmadl - garry's mod addon downloader script
-written in bash, released under public domain/cc0
+gmadl - garry's mod addon downloader
+written in bash, released in public domain/CC0
 
-runs best on linux, wsl works too.
-requires depotdownloader[1], bash, jq, curl, wget
+                <!> important <!>
+this script is designed for linux, but works under WSL if git cloned with
+core.autocrlf set to input or false. (otherwise.. $'\r': command not found)
 
-what it does:
- - allows batch downloading of addons and collections[0]
-     ./download-addon.sh 2193997180 232539187 3039181160
-     ./download-collection.sh 355803678
- - metadata scraping and saving
-     saves images*, json, and human-readable info
-     saves youtube ids as well, but doesn't download them
- - logs successful downloads to a text file
-    so it won't redownload up to date addons
+prerequisites: DepotDownloader, bash, curl, jq, wget
+DepotDownloader: https://github.com/SteamRE/DepotDownloader/releases
+most users will need the linux-x64 build. unzip in the same dir as gmadl.
+------------------------------
+usage:
+ - to download one or more addons:
+    ./download-addon.sh 110871780 112806637 [...]
+ - to download one or more collections:
+    ./download-collection.sh 355803678 [...]
+downloaded addons will be saved in addons/ in their respective folders
+e.g. addons/110871780_1693877035669674771.
 
-made in response to the nintendo addon massacre, i hope this tool
-will be of use to others in order to preserve content from here on out.
-although designed specifically for gmod, this script can easily be
-modified to work with other games (assuming they are supported.)
+features:
+ - downloads addons and collections with their respective scripts
+ - saves metadata (json and human-readable) and images for addons
+ - logs successfully downloaded addons to file
+ - maybe more features to come? please give suggestions!
 
-[0] - collection downloader only downloads the addons and their respective
-      metadata, it does not save anything about the collection itself.
-[1] - depotdownloader *must* be in the same directory as these scripts.
-[2] - steam servers may return a file with no filename, which wget will
-      save as index.html. the logic to handle this issue is complicated,
-      so this will be dealt with at a later time. apologies.
+issues, notes and todos:
+ - when fetching images, steam's servers may return a file with no
+   filename or extension, causing wget to save the image as index.html.
+   technically, this is something i can handle, but it's needlessly
+   complicated to fix. (issue+todo)
+ - download-collection.sh downloads *only* the addons within a collection,
+   it does not download metadata for the collection itself. (todo)
